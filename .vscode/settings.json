@@ -1,6 +1,6 @@
 {
   "terminal.integrated.env.linux": {
-    "PATH": "/home/aalors/.platformio/penv/bin:/home/aalors/.platformio/penv:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "PATH": "/home/alpe/.platformio/penv/bin:/home/alpe/.platformio/penv:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/alpe/.dotnet/tools",
     "PLATFORMIO_CALLER": "vscode"
   }
 }

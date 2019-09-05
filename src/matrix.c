@@ -6,18 +6,16 @@
 
 
 uint8_t curState = 0;
-
-
-// matrix states
-uint8_t MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
-uint8_t PREV_MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
-uint8_t SLAVE_MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
-
 uint32_t lastDebounceTime = 0;
 uint32_t DEBOUNCE_MATRIX[MATRIX_ROWS][MATRIX_COLS] = { 0 };
+uint32_t PREV_MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 
-uint8_t (*matrix_states[])[MATRIX_ROWS][MATRIX_COLS] = { &MATRIX_STATE,
-		&SLAVE_MATRIX_STATE, };
+uint8_t MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
+uint8_t SLAVE_MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
+uint8_t (*matrix_states[])[MATRIX_ROWS][MATRIX_COLS] = { &MATRIX_STATE, &SLAVE_MATRIX_STATE, };
+
+
+
 
 
 
