@@ -5,25 +5,44 @@
 #include <driver/gpio.h>
 
 
-//Define keyboard structure 
+// The device's name
+#define GATTS_TAG "IronBanana" 
+extern const size_t MAX_BT_DEVICENAME_LENGTH = 40;
+
+// Keyboard structure 
 #define MASTER
 #define KEYPADS 3
 
 #define MATRIX_ROWS 4
 #define MATRIX_COLS 6
 
+
+
+//Inactivity time before going to deep sleep
+#define SLEEP_MINS 10 
+
+
+
+/***************************************************************
+ *                                                             *
+ *                       Here be dragons                       *                                  
+ *                                                             *
+ * Here ends what you can modify without understanding what    *
+ * you are doing.                                              *
+ *                                                             *
+ ***************************************************************/
+
 /*
  * Pins connected to the switches matrix. 
  * Make sure to use the at least one RTC pin on cols and one on rows
+ * Initialize these vars on keyboard_config.c
  */
 extern const gpio_num_t MATRIX_COLS_PINS[];
 extern const gpio_num_t MATRIX_ROWS_PINS[];
 
-
-#define SLEEP_MINS 10 //Inactivity time before going to deep sleep
-
-
-
+typedef struct config_data {
+	char bt_device_name[MAX_BT_DEVICENAME_LENGTH];
+} config_data_t;
 
 
 
