@@ -1,21 +1,33 @@
 
+
+#include "utils.h"
 #include "matrix.h"
 
-#include <nvs_flash.h>
+
+static config_data_t config;
 
 void app_main() {
-	esp_err_t ret;
+	esp_err_t err_stat;
+	nvs_handle memory_handle;
+	size_t max_word_length = MAX_BT_DEVICENAME_LENGTH;
+
 
 	// Reset the RTC pins and prepare the matrix
 	rtc_matrix_deinit();
 	matrix_setup();
 
-	// Initialize NVS.
-	ret = nvs_flash_init();
-	if (ret == ESP_ERR_NVS_NO_FREE_PAGES) {
-		ESP_ERROR_CHECK (nvs_flash_erase());
-		ret = nvs_flash_init();
-	}
-	ESP_ERROR_CHECK(ret);
+	// Initialize NVS
+	initialize_nvs(memory_handle);
+
+	// Initialize config
+	load_default_config(&config);
+	load_stored_config(&config, memory_handle);
+
+
+	strcpy(config.bt_device_name, GATTS_TAG);
+	nvs_get_str(memory_handle, "btname", config.bt_device_name, &max_word_length);
+
+
+
 
 }
