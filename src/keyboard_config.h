@@ -7,7 +7,8 @@
 
 // The device's name
 #define GATTS_TAG "IronBanana" 
-extern const size_t MAX_BT_DEVICENAME_LENGTH = 40;
+#define MAX_BT_DEVICENAME_LENGTH 40
+#define ROW2COL
 
 // Keyboard structure 
 #define MASTER

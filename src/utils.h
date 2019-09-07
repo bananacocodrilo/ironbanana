@@ -13,7 +13,7 @@
 #define SET_BIT(var,pos) (var |= 1UL << pos);
 uint32_t millis();
 
-void initialize_nvs(nvs_handle memory_handle);
+void initialize_nvs();
 void load_default_config(config_data_t* config);
-void load_stored_config(config_data_t* config, nvs_handle memory_handle);
+esp_err_t load_stored_config(config_data_t* config, nvs_handle* memory_handle);
 
