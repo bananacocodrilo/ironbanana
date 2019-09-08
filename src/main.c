@@ -1,4 +1,4 @@
-
+#include "persisted_config.h"
 
 #include "utils.h"
 #include "matrix.h"
@@ -17,14 +17,13 @@ void app_main() {
 	// Initialize NVS
 	initialize_nvs();
 
+	#ifdef MASTER
 	// Initialize config
-	err_status = load_stored_config(&config, &memory_handle);
-	if(err_status != ESP_OK){
-		load_default_config(&config);
-	}
-
-
-
+		err_status = load_persisted_config(&config);
+	// 	//activate keyboard BT stack
+	// 	halBLEInit(1, 1, 1, 0);
+	// 	ESP_LOGI("HIDD", "MAIN finished...");
+	#endif
 
 
 

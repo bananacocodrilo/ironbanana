@@ -54,13 +54,15 @@ esp_err_t load_persisted_config(config_data_t* config){
 void load_layers(){
 	if(layers_num > 0){
 		// set keymap layouts
-		ESP_LOGI(CONFIG_TAG,"Layouts found on NVS, loading layouts");
+		ESP_LOGI(CONFIG_TAG,"Loading layouts found on NVS");
+		
 		layouts = malloc(layers_num*sizeof(uint16_t**));
+		
 		for(uint8_t i = 0;i < layers_num; i++){
 			uint16_t layout_buff[MATRIX_ROWS][KEYMAP_COLS] = {0};
 			nvs_read_layout(layer_names_arr[i],layout_buff);
 			layouts[i] = malloc(sizeof(layout_buff));
-			ESP_LOGI(NVS_TAG,"malloc");
+			ESP_LOGI(CONFIG_TAG,"malloc");
 			for(uint8_t row=0; row<MATRIX_ROWS;row++){
 				layouts[i][row] = malloc(sizeof(layout_buff[row]));
 				for(uint8_t col=0; col<KEYMAP_COLS;col++){
