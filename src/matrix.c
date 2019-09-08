@@ -120,7 +120,7 @@ void matrix_setup(void) {
 	for(uint8_t col=0; col < MATRIX_ROWS; col++) {
 
 		gpio_pad_select_gpio(MATRIX_COLS_PINS[col]);
-		gpio_set_direction(MATRIX_COLS_PINS[col], GPIO_MODE_INPUT);
+		gpio_set_direction(MATRIX_COLS_PINS[col], GPIO_MODE_INPUT_OUTPUT);
 		gpio_set_drive_capability(MATRIX_COLS_PINS[col],GPIO_DRIVE_CAP_0);
 		gpio_set_level(MATRIX_COLS_PINS[col], 0);
 
@@ -164,15 +164,14 @@ void scan_matrix(void) {
 		gpio_set_level(MATRIX_ROWS_PINS[row], 1);
 
 		for(uint8_t col=0; col <MATRIX_COLS; col++) {
-
 			curState = gpio_get_level(MATRIX_ROWS_PINS[row]);
 			
-      if( PREV_MATRIX_STATE[row][col] != curState) {
+      		if( PREV_MATRIX_STATE[row][col] != curState) {
 				DEBOUNCE_MATRIX[row][col] = millis();
 			}
 			PREV_MATRIX_STATE[row][col] = curState;
 			
-      if( (millis() - DEBOUNCE_MATRIX[row][col]) > DEBOUNCE_TIME) {
+			if( (millis() - DEBOUNCE_MATRIX[row][col]) > DEBOUNCE_TIME) {
 				if( MATRIX_STATE[row][col] != curState) {
 					MATRIX_STATE[row][col] = curState;
 				}
