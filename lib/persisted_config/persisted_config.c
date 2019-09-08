@@ -53,35 +53,43 @@ esp_err_t load_persisted_config(config_data_t* config){
 
 void load_layers(){
 	if(layers_num > 0){
-		// set keymap layouts
-		ESP_LOGI(CONFIG_TAG,"Loading layouts found on NVS");
+		ESP_LOGI(CONFIG_TAG, "Loading layouts found on NVS");
 		
 		layouts = malloc(layers_num*sizeof(uint16_t**));
-		
+		// For each layout		
 		for(uint8_t i = 0;i < layers_num; i++){
 			uint16_t layout_buff[MATRIX_ROWS][KEYMAP_COLS] = {0};
+		
 			nvs_read_layout(layer_names_arr[i],layout_buff);
 			layouts[i] = malloc(sizeof(layout_buff));
-			ESP_LOGI(CONFIG_TAG,"malloc");
-			for(uint8_t row=0; row<MATRIX_ROWS;row++){
+			
+			// For each row
+			for(uint8_t row=0; row<MATRIX_ROWS; row++){
 				layouts[i][row] = malloc(sizeof(layout_buff[row]));
+				
+				// For each key	
 				for(uint8_t col=0; col<KEYMAP_COLS;col++){
 					layouts[i][row][col] = layout_buff[row][col];
 				}
 			}
 		}
+
 	}else{
 
-		ESP_LOGI(NVS_TAG,"Layouts not found on NVS, loading default layouts");
-		free(layer_names_arr);
+		ESP_LOGI(CONFIG_TAG, "No layouts found on NVS, loading default.");
+
 		layouts = malloc(LAYERS*sizeof(uint16_t**));
 		layer_names_arr = malloc(sizeof(default_layout_names));
+
 		for(uint8_t i = 0;i < LAYERS; i++){
+
 			layouts[i] = malloc(sizeof( (*default_layouts)[i]));
 			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
 			strcpy(layer_names_arr[i],default_layout_names[i]);
+
 			for(uint8_t row=0; row<MATRIX_ROWS;row++){
 				layouts[i][row] = malloc(sizeof( (*default_layouts[i])[row]));
+				
 				for(uint8_t col=0; col<KEYMAP_COLS;col++){
 					layouts[i][row][col] = (*default_layouts[i])[row][col];
 				}
@@ -152,15 +160,6 @@ void load_layers_cfg(){
 
 
 
-
-// void nvs_load_layouts(void){
-
-// 	ESP_LOGI(NVS_TAG,"Loading layouts");
-
-
-// }
-
-
 /**
  * Try to load device's bt name from nvs, if it fails it loads the default instead
  * 
@@ -180,108 +179,108 @@ void load_bluetooth_name(config_data_t* config){
 
 
 
-/**
- * Loads the layouts stored in memory
- * 
- */
-void nvs_load_layouts(void){
+// /**
+//  * Loads the layouts stored in memory
+//  * 
+//  */
+// void nvs_load_layouts(void){
 
-	ESP_LOGI(NVS_TAG,"Loading layouts");
-	nvs_read_keymap_cfg();
+// 	ESP_LOGI(NVS_TAG,"Loading layouts");
+// 	nvs_read_keymap_cfg();
 
-	if(layers_num!=0){
+// 	if(layers_num!=0){
 
-		// set keymap layouts
-		ESP_LOGI(NVS_TAG,"Layouts found on NVS, loading layouts");
-		layouts = malloc(layers_num*sizeof(uint16_t**));
-		for(uint8_t i = 0;i < layers_num; i++){
-			uint16_t layout_buff[MATRIX_ROWS][KEYMAP_COLS] = {0};
-			nvs_read_layout(layer_names_arr[i],layout_buff);
-			layouts[i] = malloc(sizeof(layout_buff));
-			ESP_LOGI(NVS_TAG,"malloc");
-			for(uint8_t row=0; row<MATRIX_ROWS;row++){
-				layouts[i][row] = malloc(sizeof(layout_buff[row]));
-				for(uint8_t col=0; col<KEYMAP_COLS;col++){
-					layouts[i][row][col] = layout_buff[row][col];
-				}
-			}
-		}
-	}else{
+// 		// set keymap layouts
+// 		ESP_LOGI(NVS_TAG,"Layouts found on NVS, loading layouts");
+// 		layouts = malloc(layers_num*sizeof(uint16_t**));
+// 		for(uint8_t i = 0;i < layers_num; i++){
+// 			uint16_t layout_buff[MATRIX_ROWS][KEYMAP_COLS] = {0};
+// 			nvs_read_layout(layer_names_arr[i],layout_buff);
+// 			layouts[i] = malloc(sizeof(layout_buff));
+// 			ESP_LOGI(NVS_TAG,"malloc");
+// 			for(uint8_t row=0; row<MATRIX_ROWS;row++){
+// 				layouts[i][row] = malloc(sizeof(layout_buff[row]));
+// 				for(uint8_t col=0; col<KEYMAP_COLS;col++){
+// 					layouts[i][row][col] = layout_buff[row][col];
+// 				}
+// 			}
+// 		}
+// 	}else{
 
-		ESP_LOGI(NVS_TAG,"Layouts not found on NVS, loading default layouts");
-		free(layer_names_arr);
-		layouts = malloc(LAYERS*sizeof(uint16_t**));
-		layer_names_arr = malloc(sizeof(default_layout_names));
-		for(uint8_t i = 0;i < LAYERS; i++){
-			layouts[i] = malloc(sizeof( (*default_layouts)[i]));
-			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
-			strcpy(layer_names_arr[i],default_layout_names[i]);
-			for(uint8_t row=0; row<MATRIX_ROWS;row++){
-				layouts[i][row] = malloc(sizeof( (*default_layouts[i])[row]));
-				for(uint8_t col=0; col<KEYMAP_COLS;col++){
-					layouts[i][row][col] = (*default_layouts[i])[row][col];
-				}
-			}
-		}
-	}
+// 		ESP_LOGI(NVS_TAG,"Layouts not found on NVS, loading default layouts");
+// 		free(layer_names_arr);
+// 		layouts = malloc(LAYERS*sizeof(uint16_t**));
+// 		layer_names_arr = malloc(sizeof(default_layout_names));
+// 		for(uint8_t i = 0;i < LAYERS; i++){
+// 			layouts[i] = malloc(sizeof( (*default_layouts)[i]));
+// 			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
+// 			strcpy(layer_names_arr[i],default_layout_names[i]);
+// 			for(uint8_t row=0; row<MATRIX_ROWS;row++){
+// 				layouts[i][row] = malloc(sizeof( (*default_layouts[i])[row]));
+// 				for(uint8_t col=0; col<KEYMAP_COLS;col++){
+// 					layouts[i][row][col] = (*default_layouts[i])[row][col];
+// 				}
+// 			}
+// 		}
+// 	}
 
-	//set encoder layouts
-	if(layers_num!=0){
+// 	//set encoder layouts
+// 	if(layers_num!=0){
 
-		ESP_LOGI(NVS_TAG,"Encoder layouts found on NVS, loading layouts");
-		encoder_map = malloc(layers_num*sizeof(uint16_t*));
-		for(uint8_t i = 0;i < layers_num; i++){
-			uint16_t encoder_layout_buff[ENCODER_SIZE] = {0};
-			nvs_read_encoder_layout(layer_names_arr[i],encoder_layout_buff);
-			encoder_map[i] = malloc(sizeof(encoder_layout_buff));
-			ESP_LOGI(NVS_TAG,"malloc");
-			for(uint8_t key=0; key<ENCODER_SIZE;key++){
-				encoder_map[i][key] = encoder_layout_buff[key];
-			}
-		}
-	}else{
+// 		ESP_LOGI(NVS_TAG,"Encoder layouts found on NVS, loading layouts");
+// 		encoder_map = malloc(layers_num*sizeof(uint16_t*));
+// 		for(uint8_t i = 0;i < layers_num; i++){
+// 			uint16_t encoder_layout_buff[ENCODER_SIZE] = {0};
+// 			nvs_read_encoder_layout(layer_names_arr[i],encoder_layout_buff);
+// 			encoder_map[i] = malloc(sizeof(encoder_layout_buff));
+// 			ESP_LOGI(NVS_TAG,"malloc");
+// 			for(uint8_t key=0; key<ENCODER_SIZE;key++){
+// 				encoder_map[i][key] = encoder_layout_buff[key];
+// 			}
+// 		}
+// 	}else{
 
-		ESP_LOGI(NVS_TAG,"Encoder layouts not found on NVS, loading default layouts");
-		free(layer_names_arr);
-		encoder_map = malloc(LAYERS*sizeof(uint16_t*));
-		layer_names_arr = malloc(sizeof(default_layout_names));
-		for(uint8_t i = 0;i < LAYERS; i++){
-			encoder_map[i] = malloc(sizeof((default_encoder_map)[i]));
-			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
-			strcpy(layer_names_arr[i],default_layout_names[i]);
-			for(uint8_t key=0; key<ENCODER_SIZE;key++){
-				encoder_map[i][key] = default_encoder_map[i][key];
-			}
-		}
-	}
+// 		ESP_LOGI(NVS_TAG,"Encoder layouts not found on NVS, loading default layouts");
+// 		free(layer_names_arr);
+// 		encoder_map = malloc(LAYERS*sizeof(uint16_t*));
+// 		layer_names_arr = malloc(sizeof(default_layout_names));
+// 		for(uint8_t i = 0;i < LAYERS; i++){
+// 			encoder_map[i] = malloc(sizeof((default_encoder_map)[i]));
+// 			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
+// 			strcpy(layer_names_arr[i],default_layout_names[i]);
+// 			for(uint8_t key=0; key<ENCODER_SIZE;key++){
+// 				encoder_map[i][key] = default_encoder_map[i][key];
+// 			}
+// 		}
+// 	}
 
-	//set slave encoder layouts
-	if(layers_num!=0){
-		ESP_LOGI(NVS_TAG,"Slave Encoder layouts found on NVS, loading layouts");
-		slave_encoder_map = malloc(layers_num*sizeof(uint16_t*));
-		for(uint8_t i = 0;i < layers_num; i++){
-			uint16_t encoder_layout_buff[ENCODER_SIZE] = {0};
-			nvs_read_slave_encoder_layout(layer_names_arr[i],encoder_layout_buff);
-			encoder_map[i] = malloc(sizeof(encoder_layout_buff));
-			ESP_LOGI(NVS_TAG,"malloc");
-			for(uint8_t key=0; key<ENCODER_SIZE;key++){
-				slave_encoder_map[i][key] = encoder_layout_buff[key];
-			}
-		}
-	}else{
+// 	//set slave encoder layouts
+// 	if(layers_num!=0){
+// 		ESP_LOGI(NVS_TAG,"Slave Encoder layouts found on NVS, loading layouts");
+// 		slave_encoder_map = malloc(layers_num*sizeof(uint16_t*));
+// 		for(uint8_t i = 0;i < layers_num; i++){
+// 			uint16_t encoder_layout_buff[ENCODER_SIZE] = {0};
+// 			nvs_read_slave_encoder_layout(layer_names_arr[i],encoder_layout_buff);
+// 			encoder_map[i] = malloc(sizeof(encoder_layout_buff));
+// 			ESP_LOGI(NVS_TAG,"malloc");
+// 			for(uint8_t key=0; key<ENCODER_SIZE;key++){
+// 				slave_encoder_map[i][key] = encoder_layout_buff[key];
+// 			}
+// 		}
+// 	}else{
 
-		ESP_LOGI(NVS_TAG,"Slave encoder layouts not found on NVS, loading default layouts");
-		free(layer_names_arr);
-		slave_encoder_map = malloc(LAYERS*sizeof(uint16_t*));
-		layer_names_arr = malloc(sizeof(default_layout_names));
-		for(uint8_t i = 0;i < LAYERS; i++){
-			slave_encoder_map[i] = malloc(sizeof((default_encoder_map)[i]));
-			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
-			strcpy(layer_names_arr[i],default_layout_names[i]);
-			for(uint8_t key=0; key<ENCODER_SIZE;key++){
-				slave_encoder_map[i][key] = default_slave_encoder_map[i][key];
-			}
-		}
-	}
+// 		ESP_LOGI(NVS_TAG,"Slave encoder layouts not found on NVS, loading default layouts");
+// 		free(layer_names_arr);
+// 		slave_encoder_map = malloc(LAYERS*sizeof(uint16_t*));
+// 		layer_names_arr = malloc(sizeof(default_layout_names));
+// 		for(uint8_t i = 0;i < LAYERS; i++){
+// 			slave_encoder_map[i] = malloc(sizeof((default_encoder_map)[i]));
+// 			layer_names_arr[i] = malloc(sizeof(default_layout_names[i]));
+// 			strcpy(layer_names_arr[i],default_layout_names[i]);
+// 			for(uint8_t key=0; key<ENCODER_SIZE;key++){
+// 				slave_encoder_map[i][key] = default_slave_encoder_map[i][key];
+// 			}
+// 		}
+// 	}
 
-}
+// }

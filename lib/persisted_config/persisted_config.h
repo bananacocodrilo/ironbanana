@@ -7,6 +7,9 @@
 
 #include "utils.h"
 
+#include "keyboard_config.h"
+#include "keymap.h"
+
 #define CONFIG_TAG "CONFIG"
 #define KEYMAP_NAMESPACE "keymap_config"
 #define LAYOUT_NUM_KEY "layout_num"
