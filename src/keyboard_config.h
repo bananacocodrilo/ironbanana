@@ -14,10 +14,18 @@
 #define MASTER
 #define KEYPADS 3
 
+/** 
+ * Size of the keyboard. For splits keyboards this 
+ * is the size of each piece.
+ * In case there are different sizes use the bigger values
+ * for rows and cols and fill the unused positions with anything.
+ * 
+ */
 #define MATRIX_ROWS 4
 #define MATRIX_COLS 6
 
-
+// Number of layers defined by default in keymap.c
+#define LAYERS 3 
 
 //Inactivity time before going to deep sleep
 #define SLEEP_MINS 10 
@@ -35,7 +43,17 @@
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 #define SET_BIT(var,pos) (var |= 1UL << pos);
 
+#define MAX_LAYOUT_NAME_LENGTH 15
 #define KEYMAP_COLS MATRIX_COLS*KEYPADS
+
+
+#define MACRO_LEN 3 //keys for macros
+
+#define LAYERS_BASE_VAL 0xFF
+#define LAYER_HOLD_BASE_VAL 0x123
+#define LAYER_HOLD_MAX_VAL 0x134
+#define MACRO_BASE_VAL 0x103
+
 
 /*
  * Pins connected to the switches matrix. 
@@ -49,12 +67,8 @@ typedef struct config_data {
 	char bt_device_name[MAX_BT_DEVICENAME_LENGTH];
 } config_data_t;
 
+extern char default_layout_names[LAYERS][MAX_LAYOUT_NAME_LENGTH];
 
-
-
-#define KEYMAP_COLS MATRIX_COLS*KEYPADS  // used for a symmetrical split keyboard
-#define REPORT_LEN (MOD_LED_BYTES+MACRO_LEN+MATRIX_ROWS*KEYMAP_COLS) //size of hid reports with NKRO and room for 3 key macro
-#define REPORT_COUNT_BYTES (MATRIX_ROWS*KEYMAP_COLS+MACRO_LEN)
 
 
 
