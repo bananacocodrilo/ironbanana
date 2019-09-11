@@ -7,6 +7,7 @@
 
 #include "utils.h"
 
+#include "array_extra.h"
 #include "keyboard_config.h"
 #include "keymap.h"
 
@@ -30,6 +31,13 @@ void initialize_nvs();
 esp_err_t load_persisted_config(config_data_t* config);
 
 
+void load_layers();
+void load_layers_cfg();
+
+void nvs_load_layouts(void);
+void nvs_read_layout(const char* layout_name,uint16_t buffer[MATRIX_ROWS][KEYMAP_COLS]);
+
+void load_bluetooth_name(config_data_t* config);
 
 
 
