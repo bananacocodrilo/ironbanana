@@ -2,7 +2,7 @@
 
 #include "utils.h"
 #include "matrix.h"
-
+#include "hal_ble.h"
 
 static config_data_t config;
 
@@ -21,8 +21,8 @@ void app_main() {
 	// Initialize config
 		err_status = load_persisted_config(&config);
 	// 	//activate keyboard BT stack
-	// 	halBLEInit(1, 1, 1, 0);
-	// 	ESP_LOGI("HIDD", "MAIN finished...");
+		halBLEInit(1, 1, 1, 0);
+		ESP_LOGI("HIDD", "MAIN finished...");
 	#endif
 
 
