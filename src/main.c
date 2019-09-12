@@ -7,7 +7,6 @@
 static config_data_t config;
 
 void app_main() {
-	nvs_handle memory_handle;
 	esp_err_t err_status;
 
 	// Reset the RTC pins and prepare the matrix
