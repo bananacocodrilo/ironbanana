@@ -16,11 +16,11 @@
 #define HID_DEV_H__
 
 #include "hidd_le_prf_int.h"
+#include "keyboard_config.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "keyboard_config.h"
 
 /* HID Report type */
 #define HID_TYPE_INPUT       1
