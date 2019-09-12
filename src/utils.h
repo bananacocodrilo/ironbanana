@@ -1,3 +1,5 @@
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -10,4 +12,4 @@
 #define SET_BIT(var,pos) (var |= 1UL << pos);
 uint32_t millis();
 
-
+#endif

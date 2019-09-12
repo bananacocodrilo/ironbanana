@@ -20,6 +20,11 @@
 #define NVS_CONFIG_ERR 0
 
 
+extern uint8_t layers_num;
+extern char **layer_names_arr;
+extern uint16_t ***layouts;
+
+
 /*
  * @initialize nvs
  */
