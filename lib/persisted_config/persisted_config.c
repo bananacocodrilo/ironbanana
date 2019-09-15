@@ -36,7 +36,7 @@ esp_err_t load_persisted_config(config_data_t* config){
 	esp_err_t ret = nvs_open("config_c", NVS_READWRITE, &config_handle);
 
 	if (ret != ESP_OK){
-		ESP_LOGE("Utils", "Error opening NVS");
+		ESP_LOGE(CONFIG_TAG, "Error opening NVS");
 		return ret;
 	}
 
@@ -177,7 +177,7 @@ void load_bluetooth_name(config_data_t* config){
 		"btname", config->bt_device_name, &max_word_length);
 	
 	if (ret != ESP_OK){
-		ESP_LOGE("Utils", "Error reading Bluetooth name from NVS. Will use default.");
+		ESP_LOGE(CONFIG_TAG, "Error reading Bluetooth name from NVS. Will use default.");
 		strcpy(config->bt_device_name, GATTS_TAG);
 	}
 }

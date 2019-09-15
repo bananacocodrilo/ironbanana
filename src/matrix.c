@@ -135,7 +135,7 @@ void matrix_setup(void) {
 
 
 
-void scan_matrix(void) {
+void scan_matrix() {
 #ifdef COL2ROW
 	// Setting column pin as low, and checking if the input of a row pin changes.
 	for (uint8_t col = 0; col < MATRIX_COLS; col++) {
