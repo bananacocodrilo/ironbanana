@@ -1,5 +1,3 @@
-
-
 #include "split_master.h"
 
 static const uint8_t channel = 1;
@@ -12,7 +10,7 @@ static void wifi_initialize_recieve(void) {
 	tcpip_adapter_init();
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-	ESP_RROR_CHECK(esp_wifi_init(&cfg));
+	ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA)); // For some reason ESP-NOW only works if all devices are in the same mode
 	ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));

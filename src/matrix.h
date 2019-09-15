@@ -8,7 +8,6 @@
 #include <driver/rtc_io.h>
 
 #include "keyboard_config.h"
-#include "utils.h"
 
 
 #define GPIO_TAG "GPIO"
@@ -40,4 +39,5 @@ void matrix_setup(void);
 void scan_matrix(void);
 
 
+#include "keypress_handles.c"
 #endif /* MATRIX_H_ */

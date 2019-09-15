@@ -22,6 +22,7 @@
 #include <esp_now.h>
 
 #include "keyboard_config.h"
+#include "matrix.h"
 #include "persisted_config.h"
 
 
@@ -35,5 +36,6 @@ extern QueueHandle_t espnow_recieve_q;
  * @Setup the function for recieveing data via espnow
  */
 void espnow_recieve(void);
+
 
 #endif /* SPLIT_MASTER_H_ */

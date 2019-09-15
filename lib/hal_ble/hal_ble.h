@@ -27,7 +27,8 @@
 #include <freertos/event_groups.h>
 #include <freertos/queue.h>
 #include <esp_log.h>
-#include <keyboard.h>
+
+#include "keyboard.h"
 #include "common.h"
 
 #include "esp_bt.h"

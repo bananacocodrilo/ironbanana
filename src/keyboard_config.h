@@ -12,7 +12,8 @@
 
 // Keyboard structure 
 #define MASTER
-#define KEYPADS 3
+#define SPLIT_MASTER
+#define KEYPADS 2
 
 /** 
  * Size of the keyboard. For splits keyboards this 
@@ -31,6 +32,8 @@
 #define SLEEP_MINS 10 
 
 
+// #define BATT_STAT //define to enable battery monitoring
+#define BATT_PIN ADC1_CHANNEL_7 //gpio pin 35, refer to the esp32 before modifying
 
 /***************************************************************
  *                                                             *
@@ -40,6 +43,9 @@
  * you are doing.                                              *
  *                                                             *
  ***************************************************************/
+
+#define DEBOUNCE_TIME 7
+
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 #define SET_BIT(var,pos) (var |= 1UL << pos);
 
@@ -53,6 +59,11 @@
 #define LAYER_HOLD_BASE_VAL 0x123
 #define LAYER_HOLD_MAX_VAL 0x134
 #define MACRO_BASE_VAL 0x103
+#define PLUGIN_BASE_VAL 0x135
+
+#define MAX_LAYER (LAYERS-1)
+
+
 
 // Needed for BLE
 #define MOD_LED_BYTES 2 //bytes for led status and modifiers

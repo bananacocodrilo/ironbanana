@@ -5,7 +5,6 @@
 #include <nvs_flash.h>
 #include <esp_log.h>
 
-#include "utils.h"
 
 #include "array_extra.h"
 #include "keyboard_config.h"
