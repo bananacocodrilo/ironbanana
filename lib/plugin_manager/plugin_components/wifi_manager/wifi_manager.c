@@ -402,32 +402,40 @@ static const char *TAG = "wifi station";
 
 static int s_retry_num = 0;
 
-static void event_handler(void* arg, esp_event_base_t event_base,
-                                int32_t event_id, void* event_data)
-{
-    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
-        esp_wifi_connect();
-    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (s_retry_num < EXAMPLE_ESP_MAXIMUM_RETRY) {
-            esp_wifi_connect();
-            xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-            s_retry_num++;
-            ESP_LOGI(TAG, "retry to connect to the AP");
-        }
-        ESP_LOGI(TAG,"connect to the AP fail");
-    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
-        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
-        ESP_LOGI(TAG, "got ip:%s",
-                 ip4addr_ntoa(&event->ip_info.ip));
-        s_retry_num = 0;
-        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+static esp_err_t event_handler(void *ctx, system_event_t *event){
+
+    switch(event->event_id) {
+		case SYSTEM_EVENT_STA_START:
+			esp_wifi_connect();
+			break;
+		
+		case SYSTEM_EVENT_STA_DISCONNECTED:
+			if (s_retry_num < EXAMPLE_ESP_MAXIMUM_RETRY) {
+				esp_wifi_connect();
+				xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+				s_retry_num++;
+				ESP_LOGI(TAG, "retry to connect to the AP");
+			}
+        	ESP_LOGI(TAG,"connect to the AP fail");
+			break;	
+		
+		case SYSTEM_EVENT_STA_GOT_IP:
+			ESP_LOGI(TAG, "got ip:%s",
+					ip4addr_ntoa(&event->event_info.got_ip.ip_info.ip));
+			s_retry_num = 0;
+			xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+            break;
+    	default:
+        	break;
     }
+    return ESP_OK;
 }
+
 
 // disconnect to a wifi AP
 void wifi_connection_deinit(void){
 
-	ESP_ERROR_CHECK(esp_event_handler_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, event_handler));
+	ESP_ERROR_CHECK(esp_event_handler_unregister(s_wifi_event_group, ESP_EVENT_ANY_ID, NULL));
 	ESP_ERROR_CHECK(esp_wifi_disconnect());
 #ifndef SPLIT_MASTER
 	ESP_ERROR_CHECK(esp_wifi_stop());
@@ -443,6 +451,8 @@ void wifi_connection_deinit(void){
 	vTaskDelay(250/portTICK_PERIOD_MS);
 
 }
+
+
 
 
 // connect to a wifi AP
@@ -510,7 +520,7 @@ uint8_t wifi_connection_init(void){
 						};
 						//try to connect to the default ap
 						ESP_ERROR_CHECK(esp_wifi_stop());
-						ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
+						ESP_ERROR_CHECK(esp_event_handler_register(s_wifi_event_group, ESP_EVENT_ANY_ID, &event_handler, NULL));
 						err = esp_wifi_set_config(ESP_IF_WIFI_STA,&ap_config);
 						ESP_LOGI(WIFI_TAG, "Found default AP %d: %s",ap_record ,ap_records[ap_record].ssid);
 						err = esp_wifi_start();
@@ -526,7 +536,7 @@ uint8_t wifi_connection_init(void){
 								.sta = sta_config
 						};
 						ESP_ERROR_CHECK(esp_wifi_stop());
-						ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
+						ESP_ERROR_CHECK(esp_event_handler_register(s_wifi_event_group, ESP_EVENT_ANY_ID, &event_handler, NULL));
 						err = esp_wifi_set_config(ESP_IF_WIFI_STA,&ap_config);
 						if(err != ESP_OK){
 							ESP_LOGE(WIFI_TAG, "Error setting AP %s config: %s", sta_config.ssid, esp_err_to_name(err));

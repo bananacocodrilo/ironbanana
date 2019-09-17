@@ -1,25 +1,7 @@
 #ifndef KEYMAP_C
 #define KEYMAP_C
 
-#include "key_definitions.h"
-#include "keyboard_config.h"
 #include "keymap.h"
-
-/** 
- *  A bit different from QMK, default returns you to the first layer,
- *  LOWER and RAISE increase/lower layer by order.
- */
-
-#define DEFAULT 0x100
-#define LOWER 0x101
-#define RAISE 0x102
-
-
-// Fillers to make layering more clear
-#define _______ KC_TRNS
-#define XXXXXXX KC_NO
-
-
 
 // Keymaps are designed to be relatively interchangeable with QMK
 enum custom_keycodes {
@@ -40,15 +22,6 @@ char default_layout_names[LAYERS][MAX_LAYOUT_NAME_LENGTH] = {
 	"Plugins",
 };
 
-
-/* select a keycode for your macro
- * important - first macro must be initialized as MACRO_BASE_VAL
- * */
-
-#define MACROS_NUM 2
-enum custom_macros {
-	KC_CTRL_ALT_DELETE = MACRO_BASE_VAL, KC_ALT_F4,
-};
 
 /*define what the macros do
  * important- make sure you you put the macros in the same order as the their enumeration

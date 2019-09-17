@@ -1,12 +1,14 @@
 {
   "terminal.integrated.env.linux": {
-    "PATH": "/home/alpe/.platformio/penv/bin:/home/alpe/.platformio/penv:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/alpe/.dotnet/tools",
+    "PATH": "/home/aalors/.platformio/penv/bin:/home/aalors/.platformio/penv:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
     "PLATFORMIO_CALLER": "vscode"
   },
   "files.associations": {
     "matrix.h": "c",
     "persisted_config.h": "c",
     "esp_log.h": "c",
-    "utils.h": "c"
+    "utils.h": "c",
+    "keyboard_config.h": "c",
+    "keymap.h": "c"
   }
 }

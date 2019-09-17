@@ -1,39 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- *
- * Copyright 2018 Gal Zaidenstein.
- */
-
-#ifndef KEYPRESS_HANDLES_C
-#define KEYPRESS_HANDLES_C
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_log.h"
-#include "keymap.c"
-#include "matrix.h"
-
-#include "persisted_config.h"
-#include "keyboard_config.h"
-
-#include "../lib/plugin_manager/plugins.h"
-#include "../lib/plugin_manager/plugin_manager.h"
-#include "../lib/hal_ble/hal_ble.h"
-#include "../lib/u8g2_OLED/oled_tasks.h"
-
-#define KEY_PRESS_TAG "KEY_PRESS"
+#include "keypress_handles.h"
 
 /*
  * Current state of the keymap,each cell will hold the location of the key in the key report,
@@ -120,7 +85,7 @@ void media_control_release(uint16_t keycode) {
 }
 
 //used for debouncing
-static uint32_t millis() {
+uint32_t millis() {
 	return esp_timer_get_time() / 1000;
 }
 
@@ -131,6 +96,7 @@ void layer_adjust(uint16_t keycode) {
 	if (cur_time - prev_time > DEBOUNCE_TIME) {
 		if (layer_hold_flag == 0) {
 			switch (keycode) {
+				
 			case DEFAULT:
 				current_layout = 0;
 				break;
@@ -311,5 +277,3 @@ uint8_t *check_key_state(uint16_t **keymap) {
 	return current_report;
 
 }
-
-#endif

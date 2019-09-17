@@ -5,7 +5,7 @@
 #include "split_master.h"
 #include "espnow_split.h"
 #include "keycode_conv.h"
-#include "keypress_handles.c"
+#include "keypress_handles.h"
 
 #define MAIN_TAG "MAIN"
 
