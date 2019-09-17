@@ -12,8 +12,24 @@
 
 // Keyboard structure 
 #define MASTER
-#define SPLIT_MASTER
+// #define SPLIT_MASTER
 #define KEYPADS 2
+
+
+
+//Encoder definitions
+// #define R_ENCODER // undefine if no rotary encoder is used
+//#define R_ENCODER_SLAVE // undefine if no rotary encoder is used on slave pad
+#define ENCODER_A_PIN GPIO_NUM_32 // encoder phase A pin
+#define ENCODER_B_PIN GPIO_NUM_33// encoder phase B pin
+#define ENCODER_S_PIN GPIO_NUM_27// encoder switch pin
+
+//OLED Parameters
+// #define OLED_ENABLE //undefine if no oled is used
+#define OLED_SDA_PIN GPIO_NUM_23
+#define OLED_SCL_PIN GPIO_NUM_22
+
+
 
 /** 
  * Size of the keyboard. For splits keyboards this 

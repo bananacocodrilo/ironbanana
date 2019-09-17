@@ -37,6 +37,7 @@
 #include "u8g2.h"
 #include "u8g2_esp32_hal.h"
 #include "keyboard_config.h"
+#include "keymap.h"
 #include "battery_monitor.h"
 #include "persisted_config.h"
 

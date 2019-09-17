@@ -30,7 +30,7 @@ static void wifi_initialize_recieve(void) {
 //ESP-NOW callback upon receiving data
 static void espnow_recv_cb(const uint8_t *mac_addr, const uint8_t *data,
 		int data_len) {
-	uint8_t CURRENT_ENCODER[1] = { 0 };
+	// uint8_t CURRENT_ENCODER[1] = { 0 };
 	uint8_t CURRENT_MATRIX[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 	ESP_LOGI(SPLIT_MASTER_TAG, "Data received!");
 

@@ -15,7 +15,10 @@ uint8_t SLAVE_MATRIX_STATE[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 uint8_t (*matrix_states[])[MATRIX_ROWS][MATRIX_COLS] = { &MATRIX_STATE, &SLAVE_MATRIX_STATE, };
 
 
-
+//used for debouncing
+static uint32_t millis() {
+	return esp_timer_get_time() / 1000;
+}
 
 
 
