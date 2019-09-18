@@ -10,7 +10,7 @@ uint32_t debounce_matrix[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 void initialize_matrix_pins(void){
   
   for(uint8_t row = 0; row < MATRIX_ROWS; row++) {
-	gpio_pad_select_gpio(MATRIX_ROWS_PINS[row]);
+	  gpio_pad_select_gpio(MATRIX_ROWS_PINS[row]);
 	
 	#ifdef COL2ROW
 		gpio_set_direction(MATRIX_ROWS_PINS[row], GPIO_MODE_INPUT_OUTPUT);
@@ -18,12 +18,12 @@ void initialize_matrix_pins(void){
 		gpio_set_drive_capability(MATRIX_ROWS_PINS[row],GPIO_DRIVE_CAP_0);
 	#endif
 
-	gpio_set_level(MATRIX_ROWS_PINS[row], 0);
-	ESP_LOGI(MATRIX_TAG,"Row %d on GPIO %d is level %d", row, MATRIX_ROWS_PINS[row],gpio_get_level(MATRIX_ROWS_PINS[row]));
+    gpio_set_level(MATRIX_ROWS_PINS[row], 0);
+    ESP_LOGI(MATRIX_TAG,"Row %d on GPIO %d is level %d", row, MATRIX_ROWS_PINS[row],gpio_get_level(MATRIX_ROWS_PINS[row]));
   }
 
   for(uint8_t col = 0; col < MATRIX_COLS; col++) {
-	gpio_pad_select_gpio(MATRIX_COLS_PINS[col]);
+	  gpio_pad_select_gpio(MATRIX_COLS_PINS[col]);
 	
 	#ifdef COL2ROW
 		gpio_set_direction(MATRIX_COLS_PINS[col], GPIO_MODE_INPUT_OUTPUT);
@@ -31,8 +31,8 @@ void initialize_matrix_pins(void){
 		gpio_set_drive_capability(MATRIX_COLS_PINS[col],GPIO_DRIVE_CAP_0);
 	#endif
 
-	gpio_set_level(MATRIX_COLS_PINS[col], 0);
-	ESP_LOGI(MATRIX_TAG,"Col %d on GPIO %d is level %d", col, MATRIX_COLS_PINS[col],gpio_get_level(MATRIX_COLS_PINS[col]));
+    gpio_set_level(MATRIX_COLS_PINS[col], 0);
+    ESP_LOGI(MATRIX_TAG,"Col %d on GPIO %d is level %d", col, MATRIX_COLS_PINS[col],gpio_get_level(MATRIX_COLS_PINS[col]));
   }
 
 
@@ -68,7 +68,7 @@ uint32_t execMillis = esp_timer_get_time() / 1000;
 			}
 		}
 
-		gpio_set_level(MATRIX_COLS_PINS[col], 1);
+		gpio_set_level(MATRIX_COLS_PINS[col], 0);
 	}
 
 #else
@@ -93,7 +93,7 @@ uint32_t execMillis = esp_timer_get_time() / 1000;
 				}
 			}
 		}
-		gpio_set_level(MATRIX_ROWS_PINS[row], 1);
+		gpio_set_level(MATRIX_ROWS_PINS[row], 0);
 	}
 #endif
 
