@@ -1,6 +1,14 @@
 #ifndef MAIN_TASKS_H_
 #define MAIN_TASKS_H_
 
+#include <stdint.h>
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "firmware_config.h"
+#include "matrix.h"
+
 
 // Config for keypress_reports
 #define KP_REPORTS_TAG  "Keypress reports task"
