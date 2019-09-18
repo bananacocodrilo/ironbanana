@@ -15,5 +15,4 @@ void app_main(){
 
 		xTaskCreatePinnedToCore(keypress_reports, KP_REPORTS_TAG, KP_REPORTS_STACK_DEPTH,
 				NULL, KP_REPORTS_PRIORITY, xKpReportsTask, KP_REPORTS_CORE);
-		ESP_LOGI("Keyboard task", "initializezd");
 }
