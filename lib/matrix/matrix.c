@@ -98,4 +98,30 @@ uint32_t execMillis = esp_timer_get_time() / 1000;
 #endif
 
 
+void compose_keyboard_matrix(void){
+  uint8_t rowOffset = 0;
+  
+  // First copy the master 
+  rowOffset = MATRIX_ROWS * (KEYPAD_POSITION - 1);
+  for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+		for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+      keyboard_matrix[row + rowOffset][col] = matrix_state[row][col];
+    }
+  }
+
+  // TODO add support for split keyboard
+}
+
+
+
+void log_matrix_state(){	
+
+  printf("\n\n|===|===|===|===|===|===|\n");
+  for (uint8_t row = 0; row < MATRIX_ROWS*NUM_KEYPADS; row++) {
+		for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+      printf("| %s ", ((keyboard_matrix[row][col] == 1) ? "*": "\u2022"));
+    }
+    printf("|\n|---|---|---|---|---|---|\n");
+}
+
 }

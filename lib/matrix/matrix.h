@@ -8,7 +8,11 @@
 
 #include "firmware_config.h"
 
-#define DEBOUNCE_TIME 9
+#define DEBOUNCE_TIME 7
+
+
+extern uint8_t keyboard_matrix[MATRIX_ROWS*NUM_KEYPADS][MATRIX_COLS];
+
 
 /**
  * Configure matrix pins as appropiate inputs/outputs
@@ -20,6 +24,14 @@ void initialize_matrix_pins(void);
 */
 void scan_matrix_pins(void);
 
+/**
+ * Joins master's and slaves' matrix into a single one
+*/
+void compose_keyboard_matrix(void);
 
+/**
+ * Visual log of the keyboard state
+*/
+void log_matrix_state(void);
 
 #endif
