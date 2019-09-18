@@ -3,8 +3,12 @@
 
 #include <driver/gpio.h>
 
+#include <esp_log.h>
+#include <esp_timer.h>
+
 #include "firmware_config.h"
 
+#define DEBOUNCE_TIME 9
 
 /**
  * Configure matrix pins as appropiate inputs/outputs
