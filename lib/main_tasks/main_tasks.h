@@ -8,6 +8,8 @@
 
 #include "firmware_config.h"
 #include "matrix.h"
+#include "layouts.h"
+
 
 
 // Config for keypress_reports
