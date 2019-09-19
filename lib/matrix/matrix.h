@@ -11,7 +11,7 @@
 #define DEBOUNCE_TIME 7
 
 
-extern uint8_t keyboard_matrix[MATRIX_ROWS*NUM_KEYPADS][MATRIX_COLS];
+extern uint8_t keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS];
 
 
 /**

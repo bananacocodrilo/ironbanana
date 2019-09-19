@@ -6,7 +6,7 @@ uint8_t matrix_state[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 uint8_t prev_matrix_state[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 uint32_t debounce_matrix[MATRIX_ROWS][MATRIX_COLS] = { 0 };
 
-uint8_t keyboard_matrix[MATRIX_ROWS*NUM_KEYPADS][MATRIX_COLS] = { 0 }; 
+uint8_t keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
 
 
 #ifdef COL2ROW
@@ -48,7 +48,7 @@ void initialize_matrix_pins(void){
 	}
 
 	// Initializing columns
-	for(uint8_t col=0; col < MATRIX_ROWS; col++) {
+	for(uint8_t col=0; col < MATRIX_COLS; col++) {
 
 		gpio_pad_select_gpio(MATRIX_COLS_PINS[col]);
 		gpio_set_direction(MATRIX_COLS_PINS[col], GPIO_MODE_INPUT_OUTPUT);
@@ -142,8 +142,8 @@ void compose_keyboard_matrix(void){
 void log_matrix_state(){	
 
   printf("\n\n|===|===|===|===|===|===|\n");
-  for (uint8_t row = 0; row < MATRIX_ROWS*NUM_KEYPADS; row++) {
-		for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+  for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+		for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS; col++) {
       printf("| %s ", ((keyboard_matrix[row][col] == 1) ? "*": "\u2022"));
     }
     printf("|\n|---|---|---|---|---|---|\n");
