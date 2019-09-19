@@ -28,12 +28,13 @@ enum layer_codes {
 };
 
 enum layer_positions {
-  DEFAULT_LAYER_INDEX,
+  DEFAULT_LAYER_INDEX = 0,
   RAISE_LAYER_INDEX,
   LOWER_LAYER_INDEX
 };
 
 extern uint8_t active_layer;
-extern uint16_t const (*LAYOUT[LAYERS_NUM])[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS];
+extern const uint16_t LAYOUT[LAYERS_NUM][MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS];
+// extern uint16_t const (*LAYOUT[LAYERS_NUM])[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS];
 
 #endif

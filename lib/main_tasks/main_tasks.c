@@ -3,7 +3,18 @@
 // Used to compare against current matrix state and detect changes
 uint8_t prev_keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
 // Stores keycodes held by each key in order to send the correct release if the layer changes
-uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { KC_UNDEFINED }; 
+uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
+
+
+/**
+ * Sends keypress report over ble
+ * TODO: Doing it
+*/
+void send_keypress_report(uint16_t keycode, uint8_t direction ){
+  log_matrix_state();
+  printf("\nKeycode %d is now %d\n", keycode, direction);
+}
+
 
 
 /**
@@ -24,7 +35,8 @@ uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { KC_UNDEFINED }
  *    - 1 to 0:
  *      - Retrieve keycode from held
  *      - Add keycode(release) to next report
- *
+ *  - Lastly update prev status
+ * 
  */
 void keypress_reports(void *pvParameters) {
   uint16_t keycode;
@@ -32,7 +44,6 @@ void keypress_reports(void *pvParameters) {
   while(1){
     // Scan my matrix
     scan_matrix_pins();
-    log_matrix_state();
     // Compose the complete matrix
     compose_keyboard_matrix();
 
@@ -44,18 +55,17 @@ void keypress_reports(void *pvParameters) {
         if(keyboard_matrix[row][col] == prev_keyboard_matrix[row][col]){
           continue;
         
-        // Key changed 0 -> 1
-        }else if(keyboard_matrix[row][col] == 1){
+        // Key changed RELEASED -> PRESSED 
+        }else if(keyboard_matrix[row][col] == PRESSED){
           keycode = LAYOUT[active_layer][row][col];
-           
+          
           // See through transparent keys
           if(keycode == KC_TRANSPARENT){
-            keycode == LAYOUT[DEFAULT_LAYER_INDEX][row][col];
+            keycode = LAYOUT[DEFAULT_LAYER_INDEX][row][col];
           }
 
           // Check for special functions
-          if( keycode >= CUSTOM_KEYCODES_BASE && 
-              keycode <= CUSTOM_KEYCODES_LIMIT){
+          if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
             // do modifier stuff
 
           /** Never trust final user, 
@@ -64,27 +74,36 @@ void keypress_reports(void *pvParameters) {
            * */
           }else if(keycode != KC_TRANSPARENT){
 
-            if(keyboard_holds[row][col] == KC_UNDEFINED){
-              keyboard_holds[row][col] = keycode;
-            // send keycode press to queue   
-
-            //Detect a second press before releasing the key. Just in case since this should never happen.
-            }else{
-              //send release keyboard_holds[row][col]
-              //keyboard_holds[row][col] == null
-
+            // This should never happen. It means I detect a second press on a key without releasing it.
+            // Send a release just in case.
+            if(keyboard_holds[row][col] != KC_NO){
+              send_keypress_report(keyboard_holds[row][col], RELEASED);
             }
-
+            // Send the report
+            send_keypress_report(keycode, PRESSED);
           } 
+          // Update the hold matrix
+          keyboard_holds[row][col] = keycode;
 
-
-        // Key changed 1 -> 0
+        // Key changed PRESSED -> RELEASED
         }else{
+          keycode = keyboard_holds[row][col];
+          keyboard_holds[row][col] = KC_NO;
 
+          // Check for special functions
+          if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
+          // do modifier stuff
+
+          // Send report and clean matrix
+          }else{
+            send_keypress_report(keycode, RELEASED);
+          }
         }
+        
+        // Lastly update prev status
+        prev_keyboard_matrix[row][col] = keyboard_matrix[row][col];
       } 
     }
-    vTaskDelay( 100 );
+    vTaskDelay(10);
   }
 }
-

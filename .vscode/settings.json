@@ -9,6 +9,7 @@
     "esp_log.h": "c",
     "utils.h": "c",
     "keyboard_config.h": "c",
-    "keymap.h": "c"
+    "keymap.h": "c",
+    "main_tasks.h": "c"
   }
 }

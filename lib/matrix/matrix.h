@@ -8,8 +8,12 @@
 
 #include "firmware_config.h"
 
-#define DEBOUNCE_TIME 7
+#define DEBOUNCE_TIME 10
 
+enum direction {
+  RELEASED = 0,
+  PRESSED
+};
 
 extern uint8_t keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS];
 

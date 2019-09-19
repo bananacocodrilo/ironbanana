@@ -144,7 +144,7 @@ void log_matrix_state(){
   printf("\n\n|===|===|===|===|===|===|\n");
   for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
 		for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS; col++) {
-      printf("| %s ", ((keyboard_matrix[row][col] == 1) ? "*": "\u2022"));
+      printf("| %s ", ((keyboard_matrix[row][col] == PRESSED) ? "*": "\u2022"));
     }
     printf("|\n|---|---|---|---|---|---|\n");
   }
