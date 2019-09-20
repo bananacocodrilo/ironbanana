@@ -5,6 +5,8 @@
 
 #define MAIN_TAG "Main"
 #define MATRIX_TAG "Matrix"
+#define HID_MANAGER_TAG "HID "
 
+#define GATTS_TAG "IronBanana v0.2"
 
 #endif
