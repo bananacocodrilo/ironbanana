@@ -12,7 +12,7 @@ uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 };
 */
 void send_keypress_report(uint16_t keycode, uint8_t direction ){
   log_matrix_state();
-  printf("\nKeycode %d is now %d\n", keycode, direction);
+  printf("\nKeycode %d is now %d (layer %d)\n", keycode, direction, active_layer);
 }
 
 
@@ -66,7 +66,7 @@ void keypress_reports(void *pvParameters) {
 
           // Check for special functions
           if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
-            // do modifier stuff
+            custom_keycode_manager(keycode, PRESSED);
 
           /** Never trust final user, 
            * Check in case there are transparents in default layer.
@@ -81,6 +81,7 @@ void keypress_reports(void *pvParameters) {
             }
             // Send the report
             send_keypress_report(keycode, PRESSED);
+            
           } 
           // Update the hold matrix
           keyboard_holds[row][col] = keycode;
@@ -92,7 +93,7 @@ void keypress_reports(void *pvParameters) {
 
           // Check for special functions
           if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
-          // do modifier stuff
+            custom_keycode_manager(keycode, RELEASED);
 
           // Send report and clean matrix
           }else{

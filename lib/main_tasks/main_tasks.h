@@ -10,6 +10,7 @@
 #include "matrix.h"
 #include "layouts.h"
 
+#include "add_ons.h"
 
 
 // Config for keypress_reports
