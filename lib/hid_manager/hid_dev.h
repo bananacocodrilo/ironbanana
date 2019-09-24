@@ -20,7 +20,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "keyboard_config.h"
+#include "firmware_config.h"
 
 /* HID Report type */
 #define HID_TYPE_INPUT       1
@@ -260,4 +260,3 @@ void hid_dev_send_report(esp_gatt_if_t gatts_if, uint16_t conn_id, uint8_t id,
 void hid_consumer_build_report(uint8_t *buffer, consumer_cmd_t cmd);
 
 #endif /* HID_DEV_H__ */
-
