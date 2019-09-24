@@ -4,15 +4,18 @@
 uint8_t prev_keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
 // Stores keycodes held by each key in order to send the correct release if the layer changes
 uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
-
+// Stores the report send via ble
+uint8_t current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
+uint8_t test_current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
 
 /**
  * Sends keypress report over ble
  * TODO: Doing it
 */
-void send_keypress_report(uint16_t keycode, uint8_t direction ){
-  log_matrix_state();
-  printf("\nKeycode %d is now %d (layer %d)\n", keycode, direction, active_layer);
+void send_keypress_report(uint8_t *report){
+  // log_matrix_state();
+  // xQueueSend(keyboard_q, report, (TickType_t) 0);
+  xQueueSend(keyboard_q, test_current_report, (TickType_t) 0);
 }
 
 
@@ -42,14 +45,16 @@ void keypress_reports(void *pvParameters) {
   uint16_t keycode;
 
   while(1){
+    uint8_t i = 0;
+    
     // Scan my matrix
     scan_matrix_pins();
     // Compose the complete matrix
     compose_keyboard_matrix();
 
     // For each key
-    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-      for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS; col++) {
+    for (uint8_t row = 0; row < MATRIX_ROWS && i < KEYBOARD_REPORT_LENGTH; row++) {
+      for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS && i < KEYBOARD_REPORT_LENGTH; col++) {
 
         // Key didnt change -> skip
         if(keyboard_matrix[row][col] == prev_keyboard_matrix[row][col]){
@@ -77,11 +82,16 @@ void keypress_reports(void *pvParameters) {
             // This should never happen. It means I detect a second press on a key without releasing it.
             // Send a release just in case.
             if(keyboard_holds[row][col] != KC_NO){
-              send_keypress_report(keyboard_holds[row][col], RELEASED);
+              // send_keypress_report(keyboard_holds[row][col], RELEASED);
+              current_report[i++] = keyboard_holds[row][col];
+              if(i >= KEYBOARD_REPORT_LENGTH) {
+                break;
+              }
             }
             // Send the report
-            send_keypress_report(keycode, PRESSED);
-            
+            // send_keypress_report(keycode, PRESSED);
+            current_report[i++] = keycode;
+            add_keycode(keycode_to_key(keycode), test_current_report);
           } 
           // Update the hold matrix
           keyboard_holds[row][col] = keycode;
@@ -97,7 +107,9 @@ void keypress_reports(void *pvParameters) {
 
           // Send report and clean matrix
           }else{
-            send_keypress_report(keycode, RELEASED);
+            // send_keypress_report(keycode, RELEASED);
+            current_report[i++] = keycode;
+            remove_keycode(keycode, test_current_report);
           }
         }
         
@@ -105,6 +117,8 @@ void keypress_reports(void *pvParameters) {
         prev_keyboard_matrix[row][col] = keyboard_matrix[row][col];
       } 
     }
+
+    send_keypress_report(current_report);
     vTaskDelay(10);
   }
 }

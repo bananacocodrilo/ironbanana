@@ -7,6 +7,13 @@
 #define MATRIX_TAG "Matrix"
 #define HID_MANAGER_TAG "HID "
 
+#define KRO_14 14
+#define KEYBOARD_REPORT_LENGTH KRO_14
+#define HID_CC_IN_RPT_LEN 2 // HID consumer control input report length
+#define REPORT_COUNT_BYTES KEYBOARD_REPORT_LENGTH
+
+
+
 #define GATTS_TAG "IronBanana v0.2"
 
 #endif
