@@ -14,6 +14,6 @@
 
 
 
-#define GATTS_TAG "IronBanana v0.2"
+#define BLUETOOTH_DEVICE_NAME "IronBanana v0.2"
 
 #endif

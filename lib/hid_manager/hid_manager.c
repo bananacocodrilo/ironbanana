@@ -1,5 +1,7 @@
 #include "hid_manager.h"
 
+esp_bd_addr_t remote_bd_addr;
+
 
 QueueHandle_t media_q;
 QueueHandle_t keyboard_q;
@@ -33,8 +35,8 @@ static esp_ble_adv_data_t hidd_adv_data = {
   .include_name = true, 
   .include_txpower = true, 
   .min_interval = 0x0006, //slave connection min interval, Time = min_interval * 1.25 msec
-  .max_interval = 0x0010, //slave connection max interval, Time = max_interval * 1.25 msec
-  .appearance = 0x03c0,       //HID Generic,
+  .max_interval = 0x0020, //slave connection max interval, Time = max_interval * 1.25 msec
+  .appearance = 0x03C1,       //HID Generic Keyboard,
   .manufacturer_len = 0, 
   .p_manufacturer_data = NULL, 
   .service_data_len = 0, 
@@ -97,17 +99,16 @@ esp_err_t hal_BLE_Init() {
 		memset(&hidd_le_env, 0, sizeof(hidd_le_env_t));
 		hidd_le_env.enabled = true;
 	}
-
-	
-	esp_ble_gap_register_callback(gap_event_handler);
 	hidd_le_env.hidd_cb = hidd_event_callback;
 
+	esp_ble_gap_register_callback(gap_event_handler);
+	
 	if (hidd_register_cb() != ESP_OK) {
 		ESP_LOGE(HID_MANAGER_TAG, "register CB failed");
 		return ESP_FAIL;
 	}
 
-	esp_ble_gatts_app_register(BATTRAY_APP_ID);
+	// esp_ble_gatts_app_register(BATTRAY_APP_ID);
 	if (esp_ble_gatts_app_register(HIDD_APP_ID) != ESP_OK) {
 		ESP_LOGE(HID_MANAGER_TAG, "Register App failed");
 		return ESP_FAIL;
@@ -148,38 +149,46 @@ esp_err_t hal_BLE_Init() {
 
 /** @brief Callback for GAP events */
 static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param){
+	
 	switch (event) {
-
 	case ESP_GAP_BLE_ADV_DATA_SET_COMPLETE_EVT:
 		esp_ble_gap_start_advertising(&hidd_adv_params);
 		break;
 
 	case ESP_GAP_BLE_SEC_REQ_EVT:
 		for (int i = 0; i < ESP_BD_ADDR_LEN; i++) {
-			ESP_LOGD(HID_MANAGER_TAG, "%x:", param->ble_security.ble_req.bd_addr[i]);
+			ESP_LOGD(HID_MANAGER_TAG, "GAP: %x:", param->ble_security.ble_req.bd_addr[i]);
 		}
 		esp_ble_gap_security_rsp(param->ble_security.ble_req.bd_addr, true);
 		break;
 
 	case ESP_GAP_BLE_AUTH_CMPL_EVT:
-		sec_conn = true;
-		esp_bd_addr_t bd_addr;
-		memcpy(bd_addr, param->ble_security.auth_cmpl.bd_addr,
+		memcpy(remote_bd_addr, param->ble_security.auth_cmpl.bd_addr,
 				sizeof(esp_bd_addr_t));
-		ESP_LOGI(HID_MANAGER_TAG, "remote BD_ADDR: %08x%04x",
-				(bd_addr[0] << 24) + (bd_addr[1] << 16) + (bd_addr[2] << 8)
-						+ bd_addr[3], (bd_addr[4] << 8) + bd_addr[5]);
-		ESP_LOGI(HID_MANAGER_TAG, "address type = %d",
+		ESP_LOGI(HID_MANAGER_TAG, "GAP: remote BD_ADDR: %08x%04x",
+				(remote_bd_addr[0] << 24) + (remote_bd_addr[1] << 16) + (remote_bd_addr[2] << 8)
+						+ remote_bd_addr[3], (remote_bd_addr[4] << 8) + remote_bd_addr[5]);
+		ESP_LOGI(HID_MANAGER_TAG, "GAP: address type = %d",
 				param->ble_security.auth_cmpl.addr_type);
-		ESP_LOGI(HID_MANAGER_TAG, "pair status = %s",
+		ESP_LOGI(HID_MANAGER_TAG, "GAP: pair status = %s",
 				param->ble_security.auth_cmpl.success ? "success" : "fail");
 		if (!param->ble_security.auth_cmpl.success) {
-			ESP_LOGE(HID_MANAGER_TAG, "fail reason = 0x%x",
+			ESP_LOGE(HID_MANAGER_TAG, "GAP: fail reason = 0x%x",
 					param->ble_security.auth_cmpl.fail_reason);
+		}else{
+			sec_conn = true;
 		}
+
+		break;
+
+	case ESP_GAP_BLE_PASSKEY_REQ_EVT:
+		esp_ble_passkey_reply(remote_bd_addr, true, 000000);
+		ESP_LOGE(HID_MANAGER_TAG, "GAP: passkey req");
+
 		break;
 
 	default:
+		ESP_LOGE(HID_MANAGER_TAG, "****** UNEXPECTED GAP EVENT %d *********",event);
 		break;
 	}
 }
@@ -192,7 +201,7 @@ static void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *
 		if (param->init_finish.state == ESP_HIDD_INIT_OK) {
 			//esp_bd_addr_t rand_addr = {0x04,0x11,0x11,0x11,0x11,0x05};
 
-			esp_ble_gap_set_device_name(GATTS_TAG);
+			esp_ble_gap_set_device_name(BLUETOOTH_DEVICE_NAME);
 			esp_ble_gap_config_adv_data(&hidd_adv_data);
 		}
 		break;
@@ -202,7 +211,7 @@ static void hidd_event_callback(esp_hidd_cb_event_t event, esp_hidd_cb_param_t *
 	case ESP_HIDD_EVENT_DEINIT_FINISH:
 		break;
 	case ESP_HIDD_EVENT_BLE_CONNECT:
-		ESP_LOGI(HID_MANAGER_TAG, "ESP_HIDD_EVENT_BLE_CONNECT");
+		ESP_LOGI(HID_MANAGER_TAG, "ESP_HIDD_EVENT_BLE_CONNECT. Conn id %d", param->connect.conn_id);
 		hid_conn_id = param->connect.conn_id;
 		break;
 	case ESP_HIDD_EVENT_BLE_DISCONNECT:
@@ -246,9 +255,9 @@ void halBLETask_keyboard(void * params) {
 					if (sec_conn == true){
 						hid_dev_send_report(hidd_le_env.gatt_if, hid_conn_id, HID_RPT_ID_KEY_IN, 
 							HID_REPORT_TYPE_INPUT, KEYBOARD_REPORT_LENGTH, key_report);
-						printf("Sent it\n");
-					}else{
-						printf("Discarded it\n");
+					// 	printf("Sent it\n");
+					// }else{
+					// 	printf("Discarded it\n");
 					}
 				}
 			}

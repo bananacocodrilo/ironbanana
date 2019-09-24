@@ -103,7 +103,7 @@ void keypress_reports(void *pvParameters) {
 
           // Check for special functions
           if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
-            custom_keycode_manager(keycode, RELEASED);
+            custom_keycode_manager(keycode_to_key(keycode), RELEASED);
 
           // Send report and clean matrix
           }else{
@@ -118,7 +118,8 @@ void keypress_reports(void *pvParameters) {
       } 
     }
 
-    send_keypress_report(current_report);
+    // send_keypress_report(current_report);
+    send_keypress_report(test_current_report);
     vTaskDelay(10);
   }
 }
