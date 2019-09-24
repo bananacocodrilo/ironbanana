@@ -3,8 +3,7 @@
 
 #include <driver/gpio.h>
 
-#define ROW2COL // or COL2ROW
-
+#define BLUETOOTH_DEVICE_NAME "IronBanana v0.21"
 
 // Keypad configuration
 #define KEYPAD_POSITION 1 // For split keyboards this is the position of this keypad in the complete layout
@@ -18,6 +17,9 @@ extern const gpio_num_t MATRIX_ROWS_PINS[];
 
 // Complete Keyboard configuration
 #define NUM_KEYPADS 1
+
+#define ROW2COL // or COL2ROW
+
 
 
 #endif

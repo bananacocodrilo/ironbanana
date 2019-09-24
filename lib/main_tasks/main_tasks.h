@@ -9,8 +9,10 @@
 #include "firmware_config.h"
 #include "matrix.h"
 #include "layouts.h"
-#include "hid_manager.h"
 #include "keyboard.h"
+
+// #include "hid_manager.h"
+#include "HID_kbdmousejoystick.h"
 
 #include "add_ons.h"
 

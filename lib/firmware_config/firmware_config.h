@@ -13,7 +13,4 @@
 #define REPORT_COUNT_BYTES KEYBOARD_REPORT_LENGTH
 
 
-
-#define BLUETOOTH_DEVICE_NAME "IronBanana v0.2"
-
 #endif
