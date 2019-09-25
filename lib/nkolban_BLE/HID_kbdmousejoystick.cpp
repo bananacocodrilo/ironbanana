@@ -417,9 +417,9 @@ class CBs: public BLEServerCallbacks {
     //https://github.com/asterics/esp32_mouse_keyboard/commit/a1796ce91155ec7db62af4a53dbdef32bc4adf08#commitcomment-28888676
     if(activateKeyboard)
     {
-      desc = (BLE2902*) inputKbd->getDescriptorByUUID(BLEUUID((uint16_t)0x2902));
-      desc->setNotifications(false);
-      kbd->stop();
+      // desc = (BLE2902*) inputKbd->getDescriptorByUUID(BLEUUID((uint16_t)0x2902));
+      // desc->setNotifications(false);
+      // kbd->stop();
     }
     
     if(activateMouse)
@@ -750,6 +750,7 @@ extern "C" {
     BLE_HOG* blehid = new BLE_HOG();
     blehid->setStackSize(16192);
     blehid->start();
+    
     return ESP_OK;
   }
 }
