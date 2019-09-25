@@ -6,7 +6,6 @@ uint8_t prev_keyboard_matrix[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 };
 uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 }; 
 // Stores the report send via ble
 uint8_t current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
-uint16_t test_current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
 
 /**
  * Sends keypress report over ble
@@ -48,16 +47,15 @@ void keypress_reports(void *pvParameters) {
   uint16_t keycode;
 
   while(1){
-    uint8_t i = 0;
-    
+  
     // Scan my matrix
     scan_matrix_pins();
     // Compose the complete matrix
     compose_keyboard_matrix();
 
     // For each key
-    for (uint8_t row = 0; row < MATRIX_ROWS && i < KEYBOARD_REPORT_LENGTH; row++) {
-      for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS && i < KEYBOARD_REPORT_LENGTH; col++) {
+    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+      for (uint8_t col = 0; col < MATRIX_COLS*NUM_KEYPADS; col++) {
 
         // Key didnt change -> skip
         if(keyboard_matrix[row][col] == prev_keyboard_matrix[row][col]){
@@ -76,7 +74,7 @@ void keypress_reports(void *pvParameters) {
           if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
             custom_keycode_manager(keycode, PRESSED);
 
-          /** Never trust final user, 
+          /** 
            * Check in case there are transparents in default layer.
            * TODO: Test settings on boot (layout, split keyboard ...)
            * */

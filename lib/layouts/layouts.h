@@ -13,12 +13,10 @@
 
 /** 
  * Following defines are used to declare special keycodes for internal usage
- * 0x00-0xA4 hold the normal keys, 0xA4-0xDF are reserved on QMK so will be avoided
- * to help compatibility.
- * I'm going to follow the IP approach and reserve a chunk for myself
+ * 0x00-0xFF are used for keys and QMK internal so will be avoided to help compatibility.
  * */ 
-#define CUSTOM_KEYCODES_BASE 0xE0 
-#define CUSTOM_KEYCODES_LIMIT 0xF0 
+#define CUSTOM_KEYCODES_BASE 0x200 
+#define CUSTOM_KEYCODES_LIMIT 0x2FF 
 #define LAYER_KEYCODES_OFFSET 0
 
 enum layer_codes {
