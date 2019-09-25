@@ -646,8 +646,8 @@ class BLE_HOG: public Task {
 		 * Its good to setup advertising by providing appearance and advertised service. This will let clients find our device by type
 		 */
 		BLEAdvertising *pAdvertising = pServer->getAdvertising();
-		//pAdvertising->setAppearance(HID_KEYBOARD);
-		pAdvertising->setAppearance(GENERIC_HID);
+		pAdvertising->setAppearance(HID_KEYBOARD);
+		// pAdvertising->setAppearance(GENERIC_HID);
     pAdvertising->setMinInterval(100); //65ms minimum
     pAdvertising->setMaxInterval(800); //500ms maximum
     // pAdvertising>set

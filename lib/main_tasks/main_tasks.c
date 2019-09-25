@@ -7,19 +7,37 @@ uint16_t keyboard_holds[MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS] = { 0 };
 // Stores the report send via ble
 uint8_t current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
 
+uint8_t active_modifier = 0;
+
+
 /**
  * Sends keypress report over ble
  * TODO: Doing it
 */
 void send_keypress_report(uint16_t keycode, keyboard_action type){
+  BaseType_t queued;
   keyboard_command_t cmd;
   cmd.keycode = keycode;
   cmd.type = type;
-  xQueueSend(keyboard_q, &cmd, (TickType_t) 0);
-  
+
   log_matrix_state();
+  queued = xQueueSend(keyboard_q, &cmd, (TickType_t) 0);
+  ESP_LOGI(MAIN_TAG, "Key %d, Press: %d", keycode, type);
+  ESP_LOGI(MAIN_TAG, "Queued status: %d", queued);
+  
 }
 
+
+uint16_t check_modifier(uint16_t key) {
+
+	uint8_t cur_mod = 0;
+	// these are the modifier keys
+	if ((KC_LCTRL <= key) && (key <= KC_RGUI)) {
+		cur_mod = (1 << (key - KC_LCTRL));
+		return cur_mod;
+	}
+	return 0;
+}
 
 
 /**
