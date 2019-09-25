@@ -9,11 +9,11 @@ const uint16_t LAYOUT[LAYERS_NUM][MATRIX_ROWS][MATRIX_COLS*NUM_KEYPADS]={
     {  LOWER, RAISE, KC_ENTER},
   },
   {
-    {XXXXXXX,  KC_C,   KC_O },
-    {XXXXXXX,XXXXXXX,  KC_D },
+    {  KC_R ,XXXXXXX,  KC_I },
+    {XXXXXXX,XXXXXXX,  KC_L },
   },
   {
-    {  KC_R ,XXXXXXX,  KC_L },
-    {XXXXXXX,XXXXXXX,_______},
+    {XXXXXXX,  KC_C,   KC_O },
+    {XXXXXXX,XXXXXXX,  KC_D },
   }
 };
