@@ -13,12 +13,12 @@ uint16_t test_current_report[KEYBOARD_REPORT_LENGTH] = { 0 };
  * TODO: Doing it
 */
 void send_keypress_report(uint16_t keycode, keyboard_action type){
-  // log_matrix_state();
-  // xQueueSend(keyboard_q, report, (TickType_t) 0);
   keyboard_command_t cmd;
   cmd.keycode = keycode;
   cmd.type = type;
   xQueueSend(keyboard_q, &cmd, (TickType_t) 0);
+  
+  log_matrix_state();
 }
 
 
@@ -81,20 +81,13 @@ void keypress_reports(void *pvParameters) {
            * TODO: Test settings on boot (layout, split keyboard ...)
            * */
           }else if(keycode != KC_TRANSPARENT){
-
             // This should never happen. It means I detect a second press on a key without releasing it.
             // Send a release just in case.
             if(keyboard_holds[row][col] != KC_NO){
               send_keypress_report(keyboard_holds[row][col], RELEASE);
-              // current_report[i++] = keyboard_holds[row][col];
-              // if(i >= KEYBOARD_REPORT_LENGTH) {
-              //   break;
-              // }
             }
             // Send the report
             send_keypress_report(keycode, PRESS);
-            // current_report[i++] = keycode;
-            // add_keycode(keycode_to_key(keycode), test_current_report);
           } 
           // Update the hold matrix
           keyboard_holds[row][col] = keycode;
@@ -106,13 +99,11 @@ void keypress_reports(void *pvParameters) {
 
           // Check for special functions
           if( keycode >= CUSTOM_KEYCODES_BASE && keycode <= CUSTOM_KEYCODES_LIMIT){
-            custom_keycode_manager(keycode_to_key(keycode), RELEASED);
+            custom_keycode_manager(keycode, RELEASED);
 
           // Send report and clean matrix
           }else{
             send_keypress_report(keycode, RELEASE);
-            // current_report[i++] = keycode;
-            // remove_keycode(keycode, test_current_report);
           }
         }
         
